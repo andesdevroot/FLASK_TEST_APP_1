@@ -6,6 +6,13 @@
 
 <div class="page-header">
   <h1>Hola, {% if name %}{{ name }}{% else %}Extraño{% endif %}!</h1>
+  {% if not known %}
+  <p>Pleased to meet you</p>
+  {% else %}
+  <p>Feliz de verte</p>
+  {% endif %}
 </div>
 {{ wtf.quick_form(form) }}
 {% endblock %}
+
+
