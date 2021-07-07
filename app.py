@@ -1,9 +1,12 @@
 from flask import Flask, render_template
 from flask import make_response
-from flask import redirect  
+from flask import redirect
+from flask_bootstrap import Bootstrap
 
 
 app = Flask(__name__)
+Bootstrap(app)
+
 # decorator 
 @app.route('/index')
 def index():
