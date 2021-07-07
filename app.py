@@ -1,16 +1,21 @@
-from flask import Flask
+from flask import Flask, render_template
+from flask import make_response
+from flask import redirect  
 
 
 app = Flask(__name__)
-
-@app.route('/')
+# decorator 
+@app.route('/index')
 def index():
-    return 'Holaaaa, Cesarrr!'
+    return render_template('index.html')
 
-@app.route('/saludo/<nombre>')
-def saludo(nombre):
-    return 'Hola, %s!' % nombre
-    
+@app.route('/user/<name>')
+def user(name):
+    return render_template('user.html', name=name)       
+
+
+
+
 
 
 if __name__ == '__main__':
