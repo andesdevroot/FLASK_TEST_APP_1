@@ -6,6 +6,11 @@ from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from wtforms.validators import Required
+from flask_sqlalchemy import SQLAlchemy
+
+import os
+
+basedir = os.path.abspath(os.path.dirname(__file__)) 
 
 
 app = Flask(__name__)
@@ -13,7 +18,16 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'hard to guess string'
 #activa bootstrap
 Bootstrap(app)
+#base de datos
+app.config['SQLALCHEMY_DATABASE_URI'] =\
+    'sqlite:///' + os.path.join(basedir, 'data.sqlite') 
 
+db = SQLAlchemy(app) 
+
+
+    
+
+#clase formulario
 class NameForm(FlaskForm):       
     name = StringField('Cual es tu nombre?', validators=[Required()])       
     submit = SubmitField('Enviar')
