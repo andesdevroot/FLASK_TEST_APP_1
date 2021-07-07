@@ -2,15 +2,27 @@ from flask import Flask, render_template
 from flask import make_response
 from flask import redirect
 from flask_bootstrap import Bootstrap
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import Required
 
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'hard to guess string'
 Bootstrap(app)
 
-# decoradores rutas
-@app.route('/index')
+class NameForm(FlaskForm):       
+    name = StringField('Cual es tu nombre?', validators=[Required()])       
+    submit = SubmitField('Enviar')
+
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    name = None
+    form = NameForm()
+    if form.validate_on_submit():                   
+        name = form.name.data                   
+        form.name.data = ''
+    return render_template('index.html', form=form, name=name)
 
 @app.route('/user/<name>')
 def user(name):
