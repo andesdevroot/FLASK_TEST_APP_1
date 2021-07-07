@@ -1,6 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, session, request, redirect, url_for, flash
 from flask import make_response
 from flask import redirect
+from flask.globals import session
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
@@ -8,7 +9,9 @@ from wtforms.validators import Required
 
 
 app = Flask(__name__)
+#CsrfProtect(app)
 app.config['SECRET_KEY'] = 'hard to guess string'
+#activa bootstrap
 Bootstrap(app)
 
 class NameForm(FlaskForm):       
@@ -17,12 +20,15 @@ class NameForm(FlaskForm):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    name = None
     form = NameForm()
-    if form.validate_on_submit():                   
-        name = form.name.data                   
+    if form.validate_on_submit():
+        old_name = session.get('name')
+        if old_name is not None and old_name != form.name.data:
+            flash('¡Parece que has cambiado tu nombre! !')                   
+        session['name'] = form.name.data
         form.name.data = ''
-    return render_template('index.html', form=form, name=name)
+        return redirect(url_for('index'))
+    return render_template('index.html', form=form, name=session.get('name'))
 
 @app.route('/user/<name>')
 def user(name):
